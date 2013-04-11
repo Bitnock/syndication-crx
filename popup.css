@@ -1,0 +1,66 @@
+body {
+  width: 270px;
+  font-family: 'Lucida Grande', 'Segoe UI', Tahoma, 'DejaVu Sans', Arial, sans-serif;
+  text-decoration: none;
+  color: black;
+  padding: 0 0;
+}
+
+header {
+
+}
+
+header h1 {
+  font-weight: normal;
+  font-size: 18px;
+  margin: 0 3px;
+  border-bottom: 1px solid #eee;
+  padding: 4px 0 15px 0;
+}
+
+section {
+
+}
+
+section ol {
+  margin: 8px 0 15px;
+  border-bottom: 1px solid #eee;
+  padding: 0 0 20px;
+  padding: 0;
+  list-style: none;
+}
+
+section ol li {
+}
+
+section ol li a {
+  display: block;
+  text-decoration: inherit;
+  color: inherit;
+  outline: none;
+  margin: 0 0 8px 0;
+  padding: 3px;
+  font-size: 11px;
+}
+
+section ol li a:hover {
+  background: #eee;
+}
+
+section ol li a h1 {
+  font-weight: normal;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  text-transform: capitalize;
+  background: url(feed-icon-16x16.png) no-repeat;
+  text-indent: 19px;
+}
+
+section ol li a h2 {
+  font-size: 10px;
+  font-weight: normal;
+  color: #bbb;
+  margin: 0;
+  padding: 0;
+}
