@@ -1,23 +1,23 @@
 {
    "background": {
       "persistent": false,
-      "scripts": [ "background.js" ]
+      "scripts": [ "scripts/background.js" ]
    },
    "content_scripts": [ {
-      "js": [ "parse.js" ],
+      "js": [ "scripts/content.js" ],
       "matches": [ "http://*/*", "https://*/*" ]
    } ],
    "description": "Quickly view any feeds (RSS, Atom, etc) that are syndicating the current page.",
    "icons": {
-      "128": "feed-icon-128x128.png"
+      "128": "images/icons/feed/orange/128.png"
    },
    "manifest_version": 2,
    "name": "Syndication Feeds",
    "page_action": {
-      "default_icon": "feed-icon-19x19.png",
-      "default_popup": "popup.html",
+      "default_icon": "images/icons/feed/orange/19.png",
+      "default_popup": "page_action/popup.html",
       "default_title": "Syndication Feeds"
    },
    "permissions": [ "tabs", "http://*/*", "https://*/*", "storage" ],
-   "version": "1.0.0"
+   "version": "1.1.0"
 }

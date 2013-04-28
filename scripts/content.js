@@ -18,27 +18,21 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-parseLinkTags();
-
-function parseLinkTags() {
+(function() {
   var result = document.evaluate(
       '//*[local-name()="link"][contains(@rel, "alternate")] ' +
       '[contains(@type, "rss") or contains(@type, "atom") or ' +
       'contains(@type, "rdf")]', document, null, 0, null);
 
   var feeds = [];
-  var item;
-  var count = 0;
+  var el;
 
-  while (item = result.iterateNext()) {
-    feeds.push({  "href": item.href,
-                  "title": item.title,
-                  "mimetype": item.type,
-                  "rel": item.rel });
-    ++count;
+  while (el = result.iterateNext()) {
+    var feed = { "href": el.href, "title": el.title, "mimetype": el.type, "rel": el.rel };
+    feeds.push(feed);
   }
 
-  if (count > 0) {
-    chrome.extension.sendMessage({msg: "popup", feeds: feeds});
+  if (feeds.length > 0) {
+    chrome.extension.sendMessage({msg: "pageActionPopUpShowMessage", feeds: feeds});
   }
-}
+})();

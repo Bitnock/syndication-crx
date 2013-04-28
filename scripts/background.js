@@ -19,7 +19,7 @@
 //  THE SOFTWARE.
 
 chrome.extension.onMessage.addListener(function(request, sender) {
-  if (request.msg == "popup") {
+  if (request.msg == "pageActionPopUpShowMessage") {
 
     var input = [];
 

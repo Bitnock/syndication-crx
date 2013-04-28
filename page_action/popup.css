@@ -77,7 +77,7 @@ section ol li a h1 {
   margin: 0;
   padding: 0;
   text-transform: capitalize;
-  background: url(feed-icon-16x16.png) no-repeat;
+  background: url(/images/icons/feed/orange/16.png) no-repeat;
   text-indent: 19px;
 }
 
