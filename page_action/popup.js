@@ -1,3 +1,5 @@
+'use strict';
+
 //  Copyright (c) 2013 Christopher Kalafarski.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18,41 +20,54 @@
 //  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 //  THE SOFTWARE.
 
-function main() {
-  chrome.tabs.getSelected(function(tab) {
-    chrome.storage.local.get(tab.id.toString(), function(result) {
-      var _list = document.getElementById('feeds');
-      var feeds = result[tab.id];
+const DOM_CONTENT_LOADED = 'DOMContentLoaded'
+const CLICK = 'click';
 
-      for (var i = 0; i < feeds.length; ++i) {
-        var _item = document.createElement('li');
+function onContentLoaded() {
+  chrome.tabs.getSelected(tab => {
+    chrome.storage.local.get(tab.id.toString(), result => {
+      const list = document.getElementById('feeds');
+      const feeds = result[tab.id];
 
-        var _block = document.createElement('a');
-        _block.addEventListener("click", function(e) {
-          var a = event.currentTarget;
-          chrome.tabs.create({ url: a.href });
+      for (let feed of feeds) {
+        const item = document.createElement('li');
+        list.appendChild(item);
+
+        const content = document.createElement('a');
+        content.href = feed.href;
+        item.appendChild(content);
+        content.addEventListener(CLICK, event => {
+          chrome.tabs.create({ url: event.currentTarget.href });
         });
-        _block.href = feeds[i].href;
-        _item.appendChild(_block);
 
-        var _h1 = document.createElement('h1');
-        if (feeds[i].title && feeds[i].title != "") {
-          _h1.appendChild(document.createTextNode(feeds[i].title));
+        const title = document.createElement('h1');
+        if (feed.title && feed.title != '') {
+          title.appendChild(document.createTextNode(feed.title));
         } else {
-          _h1.appendChild(document.createTextNode(feeds[i].rel));
+          title.appendChild(document.createTextNode(feed.rel));
         }
-        _block.appendChild(_h1);
+        content.appendChild(title);
 
-        var _h2 = document.createElement('h2');
-        _h2.appendChild(document.createTextNode(feeds[i].mimetype));
-        _block.appendChild(_h2);
+        const subtitle = document.createElement('h2');
+        subtitle.appendChild(document.createTextNode(feed.mimetype));
+        content.appendChild(subtitle);
 
-        _block.appendChild(document.createTextNode(feeds[i].href));
+        content.appendChild(document.createTextNode(feed.href));
 
-        _list.appendChild(_item);
+        const copy = document.createElement('button');
+        copy.addEventListener(CLICK, event => {
+          const textArea = document.createElement('textarea');
+          textArea.value = feed.href;
+          content.appendChild(textArea);
+          textArea.select();
+          document.execCommand('copy');
+          content.removeChild(textArea);
+          event.stopPropagation();
+        });
+        content.appendChild(copy);
       }
     });
   });
 }
 
-document.addEventListener('DOMContentLoaded', main);
+document.addEventListener(DOM_CONTENT_LOADED, onContentLoaded);
