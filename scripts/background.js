@@ -1,6 +1,6 @@
 'use strict';
 
-//  Copyright (c) 2013 Christopher Kalafarski.
+//  Copyright (c) 2016 Christopher Kalafarski.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -27,26 +27,16 @@
 // access to it. The event page script also prunes the data from local storage
 // when it is no longer needed.
 
-chrome.extension.onMessage.addListener((request, sender) => {
-  if (request.msg === "feedsFoundInContent") {
+var _store = {};
 
-    const feeds = request.feeds.filter(feed => {
-      let a = document.createElement('a');
-      a.href = feed.href;
-      return (a.protocol === "http:" || a.protocol === "https:");
-    });
+chrome.tabs.onRemoved.addListener(tabId => { delete feedsStore[tabId]; });
 
-    chrome.storage.local.set({ [sender.tab.id]: feeds }, () => {
-      if (feeds.length) {
-        // `show` essentially enables the page action, it does *not* make the
-        // pop-up visible in the browser window
-        chrome.pageAction.show(sender.tab.id);
-      }
-    });
-  }
-});
+chrome.extension.onMessage.addListener((feeds, sender) => {
+  _store[sender.tab.id] = feeds.filter(feed => {
+    const a = document.createElement('a');
+    a.href = feed.href;
+    return (a.protocol === 'http:' || a.protocol === 'https:');
+  });
 
-// When the tab is closed, remove the stored data about feeds from local storage
-chrome.tabs.onRemoved.addListener(tabId => {
-  chrome.storage.local.remove(tabId.toString());
+  if (_store[sender.tab.id].length) { chrome.pageAction.show(sender.tab.id); }
 });

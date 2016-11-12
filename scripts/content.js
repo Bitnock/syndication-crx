@@ -1,6 +1,6 @@
 'use strict';
 
-//  Copyright (c) 2013 Christopher Kalafarski.
+//  Copyright (c) 2016 Christopher Kalafarski.
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,20 @@
 
 // This is run in the context of a webpage. It detects syndication feeds by
 // looking for <link> tags that contain common syndication formats (RSS, Atom,
-// etc). If any feeds are found, the data is parsed and passed, via a message,
-// to the event page script (background.js).
+// etc). If any feeds are found, the data is parsed passed as a message.
 
-(function() {
+(() => {
   const result = document.evaluate(
       '//*[local-name()="link"][contains(@rel, "alternate")] ' +
       '[contains(@type, "rss") or contains(@type, "atom") or ' +
       'contains(@type, "rdf")]', document, null, 0, null);
 
   const feeds = [];
-  let el;
 
-  while (el = result.iterateNext()) {
-    feeds.push({
-      "href": el.href,
-      "title": el.title,
-      "mimetype": el.type,
-      "rel": el.rel
-    });
+  let e;
+  while (e = result.iterateNext()) {
+    feeds.push({ href: e.href, title: e.title, mimetype: e.type, rel: e.rel });
   }
 
-  if (feeds.length > 0) {
-    chrome.extension.sendMessage({
-      msg: "feedsFoundInContent",
-      feeds: feeds
-    });
-  }
+  chrome.extension.sendMessage(feeds);
 })();
