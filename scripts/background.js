@@ -29,7 +29,7 @@
 
 var _store = {};
 
-chrome.tabs.onRemoved.addListener(tabId => { delete feedsStore[tabId]; });
+chrome.tabs.onRemoved.addListener(tabId => { delete _store[tabId]; });
 
 chrome.extension.onMessage.addListener((feeds, sender) => {
   _store[sender.tab.id] = feeds.filter(feed => {
